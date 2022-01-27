@@ -1,18 +1,27 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja-jp">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GC Calendar</title>
+  <link rel="stylesheet" href="{% static 'gccalendar/style.css' %}">
 </head>
 <body>
   <h1>ごみ収集カレンダー 2022.01.27.00.28</h1>
+  <div class="weekcal">
   {% for item in days %}
-    <p>{{item.gcdate}}</p>
-    <p>{{item.gctype.name}}</p>
-    <div>
-      <img src="data:image/png;base64,{{item.gctype.imagebase64}}">
+    <div class="weekday">
+      <p>{{item.day}}</p>
+      <p>{{item.dow}}</p>
+      {% if item.gcday != None %}
+        <div class="icon-image">
+          <img src="data:image/png;base64,{{item.gcday.gctype.imagebase64}}">
+        </div>
+        <p>{{item.gcday.gctype.name}}</p>
+      {% endif%}
     </div>
   {% endfor %}
+  </div>
 </body>
 </html>

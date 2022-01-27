@@ -1,0 +1,22 @@
+.weekcal {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.weekday {
+  min-width: 10rem;
+  min-height: 10rem;
+  border: 1px solid #ccc;
+}
+
+.weekday p {
+  margin: 0;
+  text-align: center;
+  background-color: #ccc;
+}
+
+.weekday div.icon-image {
+  text-align: center;
+}
+/*# sourceMappingURL=style.css.map */

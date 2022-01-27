@@ -205,22 +205,59 @@ Running migrations:
 
 ## テストデータの投入
 
+`gccalendar/admin.py`を以下の様に編集し、管理画面からデータ追加できるようにする
+
+```python
+from django.contrib import admin
+from .models import *
+# Register your models here.
+admin.site.register(Area)
+admin.site.register(GcType)
+admin.site.register(GcDay)
+```
+
 ### area
 
 朝日町
 神田町
 桜町
 
-# gctype
+### gctype
 燃えるごみ
 ![燃えるゴミ](./icon_burnable.png)
 燃えないごみ
 ![燃えないごみ](./icon_imburnable.png)
 
-# gcday
+### gcday
 
 朝日町に1種類ずつ追加
 
 2022-01-27 燃えるごみ
 
 0222-01-28 燃えないごみ
+
+## indexに仮表示
+
+`index.html`
+```html
+  <h1>ごみ収集カレンダー 2022.01.27.00.28</h1>
+  {% for item in days %}
+    <p>{{item.gcdate}}</p>
+    <p>{{item.gctype.name}}</p>
+    <div>
+      <img src="data:image/png;base64,{{item.gctype.imagebase64}}">
+    </div>
+  {% endfor %}
+```
+
+`views.py`
+```python
+from .models import GcDay
+
+def index(request):
+  data = GcDay.objects.all()
+  context = {
+    'days': data
+  }
+  return render(request, 'gccalendar/index.html', context)
+```
