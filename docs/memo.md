@@ -202,3 +202,25 @@ Operations to perform:
 Running migrations:
   Applying gccalendar.0001_initial... OK
 ```
+
+## テストデータの投入
+
+### area
+
+朝日町
+神田町
+桜町
+
+# gctype
+燃えるごみ
+![燃えるゴミ](./icon_burnable.png)
+燃えないごみ
+![燃えないごみ](./icon_imburnable.png)
+
+# gcday
+
+朝日町に1種類ずつ追加
+
+2022-01-27 燃えるごみ
+
+0222-01-28 燃えないごみ

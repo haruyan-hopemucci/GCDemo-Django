@@ -6,6 +6,13 @@
   <title>GC Calendar</title>
 </head>
 <body>
-  ごみ収集カレンダー 2022.01.27.00.28
+  <h1>ごみ収集カレンダー 2022.01.27.00.28</h1>
+  {% for item in days %}
+    <p>{{item.gcdate}}</p>
+    <p>{{item.gctype.name}}</p>
+    <div>
+      <img src="data:image/png;base64,{{item.gctype.imagebase64}}">
+    </div>
+  {% endfor %}
 </body>
 </html>
