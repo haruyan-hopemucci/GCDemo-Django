@@ -14,3 +14,33 @@
     text-align: center;
   }
 }
+
+.monthcal{
+  display: flex;
+  width: 35rem;
+  flex-wrap: wrap;
+  .monthday{
+    width: 5rem;
+    border: 1px solid #ccc;
+    p{
+      margin: 0;
+      text-align: center;
+      background-color: #ccc;
+    }
+    div.icon-image{
+      height: 4rem;
+      text-align: center;
+      img{
+        width: 4rem;
+        height: 4rem;
+      }
+    }
+    &.today{
+      border: 2px solid rgb(107,166,89);;
+      p{
+        color: white;
+        background-color: rgb(107,166,89);;
+      }
+    } 
+  }
+}

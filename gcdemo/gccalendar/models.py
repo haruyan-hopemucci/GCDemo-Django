@@ -20,5 +20,5 @@ class GcDay(models.Model):
   gctype = models.ForeignKey(GcType, on_delete=models.CASCADE)
 
   def __str__(self) -> str:
-    return f'pk={self.pk}, gcdate={self.gcdate}, gctype={self.gctype}'
+    return f'pk={self.pk}, gcdate={self.gcdate}, gctype={self.gctype}, area={self.area}'
   

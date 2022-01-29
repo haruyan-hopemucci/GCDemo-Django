@@ -1,0 +1,34 @@
+.brand-city {
+  border-top: 0.5rem solid #6ba659;
+  border-bottom: 0.5rem solid #6ba659;
+}
+
+.brand-city img.city-title {
+  height: 80px;
+}
+
+html {
+  font-size: 16px;
+}
+
+main {
+  margin: .5rem;
+}
+
+h1 {
+  margin: 0.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+footer {
+  background: #6ba659;
+  padding: 1rem;
+}
+
+footer address {
+  color: white;
+  width: 16rem;
+  margin: 0 auto;
+}
+/*# sourceMappingURL=common-style.css.map */

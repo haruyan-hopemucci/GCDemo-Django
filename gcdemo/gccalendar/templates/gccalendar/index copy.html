@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja-jp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GC Calendar</title>
+  <link rel="stylesheet" href="{% static 'common/css/destyle.css' %}">
+  <link rel="stylesheet" href="{% static 'common/css/common-style.css' %}">
+  <link rel="stylesheet" href="{% static 'gccalendar/style.css' %}">
+</head>
+<body>
+  <header>
+    <div class="brand-city">
+      <img class="city-title" src="{% static 'common/img/brand-city-logo.png' %}">
+    </div>
+  </header>
+  <main>
+    <h1>伊佐山市　ごみ収集カレンダー 2022.01.27.00.28</h1>
+    <div class="weekcal">
+    {% for item in days %}
+      <div class="weekday">
+        <p>{{item.day}}</p>
+        <p>{{item.dow}}</p>
+        {% if item.gcday != None %}
+          <div class="icon-image">
+            <img src="data:image/png;base64,{{item.gcday.gctype.imagebase64}}">
+          </div>
+          <p>{{item.gcday.gctype.name}}</p>
+        {% endif%}
+      </div>
+    {% endfor %}
+    </div>
+  </main>
+  <footer>
+    <address>
+      <p>伊佐山市</p>
+      <p>〒xxx-xxxx</p>
+      <p>ＭＭ県伊佐山市朝日町1番地1</p>
+      <p><a href="tel:0xx-xxxx-xxxx">☎ 0xx-xxxx-xxxx</a>（代表）</p>
+    </address>
+  </footer>
+</body>
+</html>

@@ -261,3 +261,52 @@ def index(request):
   }
   return render(request, 'gccalendar/index.html', context)
 ```
+
+## 各種ページパスの設定
+
+こんな感じで設定する
+
+- /area_id/[int]/
+地域idから本日起点の週間カレンダー表示
+- /area_id/[int]/monthly/
+地域idから今月のカレンダー表示
+- /area_id/[int]/monthly/[yyyymm]/
+地域idからyyyy年mm月のカレンダー表示
+
+`urls.py`
+
+```python
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('login', auth_views.LoginView.as_view(template_name='login.html')),
+    path('area_id/<int:area_id>/', views.area_id, name="area_id"),
+    path('area_id/<int:area_id>/monthly/', views.area_id_monthly, name="area_id_monthly"),
+    path('area_id/<int:area_id>/monthly/<str:yyyymm>/', views.area_id_monthly, name="area_id_monthly"),
+]
+```
+
+## リレーション先のオブジェクトを取得
+
+変数名をアンダースコア2つで繋げるとリレーション先のデータをfilterできるようだ。
+アンダースコア2つで繋げる方法はdjangoのquerysetにおける標準規約と考えてよいかと。
+
+`views.py`
+
+```python
+area = Area.objects.get(pk=area_id) # Areaオブジェクトの単一取得
+# GcDay.area はAreaクラスで、今回はareaのpkを条件に抽出する。
+gcdayData = GcDay.objects.filter(area__pk=area.pk)
+```
+
+## 月の加算をしたい
+
+python標準では月単位の加算ができないので、計算で出すことにする。めんどい。
+
+```python
+  # 対象年月の一日目を取得
+  gcday_first = datetime.date(y,m,1)
+  # 対象年月の月末日を取得
+  gcday_last = datetime.date(y+(1 if m==12 else 0),(1 if m==12 else m+1),1) + datetime.timedelta(days=-1)
+```
+
+あとは、月の初日から1日ずつ日曜日になるまで`gcday_first`を減らし、同じく月末から土曜日になるまで`gcday_last`を増やすとカレンダーになる。

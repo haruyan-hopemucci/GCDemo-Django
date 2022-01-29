@@ -19,4 +19,43 @@
 .weekday div.icon-image {
   text-align: center;
 }
+
+.monthcal {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 35rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.monthcal .monthday {
+  width: 5rem;
+  border: 1px solid #ccc;
+}
+
+.monthcal .monthday p {
+  margin: 0;
+  text-align: center;
+  background-color: #ccc;
+}
+
+.monthcal .monthday div.icon-image {
+  height: 4rem;
+  text-align: center;
+}
+
+.monthcal .monthday div.icon-image img {
+  width: 4rem;
+  height: 4rem;
+}
+
+.monthcal .monthday.today {
+  border: 2px solid #6ba659;
+}
+
+.monthcal .monthday.today p {
+  color: white;
+  background-color: #6ba659;
+}
 /*# sourceMappingURL=style.css.map */
