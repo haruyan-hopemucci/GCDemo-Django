@@ -10,6 +10,7 @@ import datetime
 def index(request):
   # 本日より7日分の日付を取得
   # today = datetime.date.today()
+  '''
   today = datetime.date(2022,1,26)
   addDays = range(0,7)
   days = [None] * 7
@@ -30,9 +31,10 @@ def index(request):
       addData['gcday'] = fil[0]
     print(addData)
     daysData.append(addData)
-
+  '''
+  areas = Area.objects.all()
   context = {
-    'days': daysData
+    'areas': areas
   }
   return render(request, 'gccalendar/index.html', context)
 
@@ -87,6 +89,8 @@ def area_id(request, area_id):
 def area_id_monthly(request, area_id, yyyymm=None):
   '''
   対象エリアの月カレンダーを返す。
+  カレンダーはflexレイアウト7列で返すのを前提する。
+  日別セルのうち本日と明日にはtoday,tomorrowのクラスを付与してHTML側で装飾する。
 
   Parameters
   ----------
@@ -97,6 +101,7 @@ def area_id_monthly(request, area_id, yyyymm=None):
   # 取得できなかった場合は404を返す。
   # ショートカット get_object_or_404 も存在してこっちの方が楽だと思うが、他言語との兼ね合いを考えてtry-exceptで処理する。
   today = datetime.date(2022,1,26) # 仮
+  tomorrow = today + datetime.timedelta(days=1)
   try:
     area = Area.objects.get(pk=area_id)
   except Area.DoesNotExist:
@@ -136,9 +141,14 @@ def area_id_monthly(request, area_id, yyyymm=None):
     else:
       addData['gcday'] = fil[0]
     # print(addData)
-    if d == today:
+    # 日別装飾設定
+    if d == today:  # 本日
       addData['cell_class'] = 'today'
-    else:
+    elif d == tomorrow: # 明日
+      addData['cell_class'] = 'tomorrow'
+    elif d.month != today.month: # 指定月外
+      addData['cell_class'] = 'out-of-month'
+    else: # その他（指定月で、本日or明日以外の日）
       addData['cell_class'] = ''
     daysData.append(addData)
 

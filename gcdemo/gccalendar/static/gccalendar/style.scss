@@ -1,10 +1,26 @@
+*{
+  box-sizing: border-box;
+}
+
+.calendar-area-list{
+  li h3{
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  ul{
+    display: flex;
+    list-style: none;
+    padding: 0 1rem;
+  }
+}
+
 .weekcal{
   display: flex;
 }
 .weekday{
   min-width: 10rem;
   min-height: 10rem;
-  border: 1px solid #ccc;
+  border: 1px solid #bbb;
   p{
     margin: 0;
     text-align: center;
@@ -21,7 +37,7 @@
   flex-wrap: wrap;
   .monthday{
     width: 5rem;
-    border: 1px solid #ccc;
+    border: 1px solid #bbb;
     p{
       margin: 0;
       text-align: center;
@@ -36,11 +52,73 @@
       }
     }
     &.today{
+      position: relative;
       border: 2px solid rgb(107,166,89);;
       p{
         color: white;
         background-color: rgb(107,166,89);;
       }
+      &::before{
+        content: "きょう";
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 1.5rem;
+        bottom: calc(100% + 0.5rem);
+        left: 0;
+        color: white;
+        border: 2px solid rgb(107,166,89);;
+        background-color: rgb(107,166,89);;
+        text-align: center;
+      }
+      &::after{
+        content: "";
+        position: absolute;
+        display: block;
+        width: .5rem;
+        height: .5rem;
+        top: -0.5rem;
+        left: calc(50% - 0.5rem);
+        border: .5rem solid transparent;
+        border-top: .5rem solid rgb(107,166,89);;
+      }
     } 
+    &.tomorrow{
+      position: relative;
+      border: 2px solid #0000ff;
+      p{
+        color: white;
+        background-color: #0000ff;
+      }
+      &::before{
+        content: "あした";
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 1.5rem;
+        bottom: calc(100% + 0.5rem);
+        left: 0;
+        color: white;
+        border: 2px solid #0000ff;
+        background-color: #0000ff;
+        text-align: center;
+      }
+      &::after{
+        content: "";
+        position: absolute;
+        display: block;
+        width: .5rem;
+        height: .5rem;
+        top: -0.5rem;
+        left: calc(50% - 0.5rem);
+        border: .5rem solid transparent;
+        border-top: .5rem solid #0000ff;
+      }
+    }
+    &.out-of-month{
+      p{
+        background-color: #888;
+      }
+    }
   }
 }

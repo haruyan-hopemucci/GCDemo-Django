@@ -4,15 +4,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>伊佐山市</title>
+  <title>伊佐山市ごみ収集カレンダー管理ページ</title>
   <link rel="stylesheet" href="{% static 'common/css/destyle.css' %}">
   <link rel="stylesheet" href="{% static 'common/css/common-style.css' %}">
-  <link rel="stylesheet" href="{% static 'gccalendar/style.css' %}">
+  <link rel="stylesheet" href="{% static 'gccalendar/admin/style.css' %}">
 </head>
 <body>
   <header>
     <div class="brand-city">
       <img class="city-title" src="{% static 'common/img/brand-city-logo.png' %}">
-    人と自然がふれあう　やすらぎのまち
+    伊佐山市ごみ収集カレンダー管理ページ
     </div>
+    <a href="{% url 'logout' %}">ログアウト</a>
   </header>

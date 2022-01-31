@@ -1,10 +1,12 @@
 .brand-city {
   border-top: 0.5rem solid #6ba659;
   border-bottom: 0.5rem solid #6ba659;
+  color: #6ba659;
+  font-family: serif;
 }
 
 .brand-city img.city-title {
-  height: 80px;
+  height: 40px;
 }
 
 html {
