@@ -33,4 +33,16 @@ footer address {
   width: 16rem;
   margin: 0 auto;
 }
+
+/* form */
+form p input[type=text] {
+  border: 1px solid #bbb;
+  border-radius: .25rem;
+  padding: 0.25rem;
+}
+
+form p input[type=text]:focus {
+  -webkit-box-shadow: 0 0 .2rem .2rem lightskyblue;
+          box-shadow: 0 0 .2rem .2rem lightskyblue;
+}
 /*# sourceMappingURL=common-style.css.map */

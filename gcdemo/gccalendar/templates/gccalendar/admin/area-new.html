@@ -1,0 +1,16 @@
+{% include "./common-header.html" %}
+
+  <main>
+    <h1>収集エリア新規作成</h1>
+    <p class="alert alert-{{message_type_class}}">{{message_body}}</p>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary" type="submit">送信</button>
+    </form>
+  </main>
+
+{% include "./common-footer.html" %}
+
+</body>
+</html>

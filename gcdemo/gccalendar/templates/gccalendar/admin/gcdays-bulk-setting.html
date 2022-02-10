@@ -1,0 +1,26 @@
+{% include "./common-header.html" %}
+
+  <main>
+    <h1>収集日一括設定</h1>
+    <p class="alert alert-{{message_type_class}}">{{message_body}}</p>
+    <p><a href="{% url 'admin_gctype_list' %}">一覧へ戻る</a></p>
+    <form method="POST">
+      {% csrf_token %}
+      {% for field in form %}
+        {% if forloop.counter == 4 %}
+          <h3>曜日の入力</h3>
+        {% elif forloop.counter == 11 %}
+          <h3>週の入力</h3>
+        {% endif %}
+        {{field.errors}}
+        {{ field.label_tag }}{{ field }}　
+      {% endfor %}
+      <p> </p>
+      <button class="btn btn-primary" type="submit">送信</button>
+    </form>
+  </main>
+
+{% include "./common-footer.html" %}
+
+</body>
+</html>

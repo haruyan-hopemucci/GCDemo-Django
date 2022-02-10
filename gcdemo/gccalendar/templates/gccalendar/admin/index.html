@@ -3,14 +3,9 @@
   <main>
     <h1>ごみ収集カレンダー管理ページトップ</h1>
     <ul class="calendar-area-list">
-    {% for area in areas %}
-      <li>
-        <h3>{{ area.name }}</h3>
-        <ul>
-          <li><a href="area_id/{{area.pk}}/">📅今週のカレンダー</a></li>
-          <li><a href="area_id/{{area.pk}}/monthly/">📅今月のカレンダー</a></li>
-        </ul>
-    {% endfor %}
+      <li><a href="{% url 'admin_area_list' %}">収集エリア管理</a></li>
+      <li><a href="{% url 'admin_gctype_list' %}">ごみ分別種類管理</a></li>
+      <li><a href="{% url 'admin_gcdays_bulk_setting' %}">収集日一括設定</a></li>
     </ul>
   </main>
 

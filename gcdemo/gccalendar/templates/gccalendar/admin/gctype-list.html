@@ -1,0 +1,38 @@
+{% include "./common-header.html" %}
+
+  <main>
+    <h1>ごみ分類一覧</h1>
+    <p class="alert alert-{{message_type_class}}">{{message_body}}</p>
+    <section>
+      <a href="{% url 'admin_gctype_new' %}">新規作成</a>
+      <a href="{% url 'admin_index' %}">管理者メニュートップ</a>
+    </section>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>操作</th>
+          <th>id</th>
+          <th>ごみ分類名</th>
+          <th>アイコン</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in gctypes %}
+        <tr>
+          <td>
+            <a href="{% url 'admin_gctype_edit' item.pk %}">編集</a>
+            <a href="{% url 'admin_gctype_delete' item.pk %}">削除</a>
+          </td>
+          <td>{{ item.pk }}</td>
+          <td>{{ item.name }}</td>
+          <td><img src="data:image/png;base64,{{item.imagebase64}}" alt="{{item.name}}"></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+
+{% include "./common-footer.html" %}
+
+</body>
+</html>

@@ -3,10 +3,16 @@
   <main>
     <h1>伊佐山市　{{area_name}}　月間ごみ収集カレンダー</h1>
     <div class="monthcal">
+      <div class="monthday"><p>日</p></div>
+      <div class="monthday"><p>月</p></div>
+      <div class="monthday"><p>火</p></div>
+      <div class="monthday"><p>水</p></div>
+      <div class="monthday"><p>木</p></div>
+      <div class="monthday"><p>金</p></div>
+      <div class="monthday"><p>土</p></div>
     {% for item in days %}
       <div class="monthday {{item.cell_class}}">
         <p>{{item.day}}</p>
-        <p>{{item.dow}}</p>
         {% if item.gcday != None %}
           <div class="icon-image">
             <img src="data:image/png;base64,{{item.gcday.gctype.imagebase64}}">

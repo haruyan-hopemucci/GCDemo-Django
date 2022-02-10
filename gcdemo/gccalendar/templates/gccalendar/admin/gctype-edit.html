@@ -1,0 +1,18 @@
+{% include "./common-header.html" %}
+
+  <main>
+    <h1>ごみ分類種別編集</h1>
+    <p class="alert alert-{{message_type_class}}">{{message_body}}</p>
+    <p><a href="{% url 'admin_gctype_list' %}">一覧へ戻る</a></p>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary" type="submit">送信</button>
+    </form>
+      <p>※ファイルを選択せずに送信した場合、画像は更新されません。</p>
+  </main>
+
+{% include "./common-footer.html" %}
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% include "./common-header.html" %}
+
+  <main>
+    <h1>収集エリア一覧</h1>
+    <p class="alert alert-{{message_type_class}}">{{message_body}}</p>
+    <section>
+      <a href="{% url 'admin_area_new' %}">新規作成</a>
+      <a href="{% url 'admin_index' %}">管理者メニュートップ</a>
+    </section>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>操作</th>
+          <th>id</th>
+          <th>エリア名</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for area in areas %}
+        <tr>
+          <td>
+            <a href="{% url 'admin_area_edit' area.pk %}">編集</a>
+            <a href="{% url 'admin_area_delete' area.pk %}">削除</a>
+          </td>
+          <td>{{ area.pk }}</td>
+          <td>{{ area.name }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+
+{% include "./common-footer.html" %}
+
+</body>
+</html>

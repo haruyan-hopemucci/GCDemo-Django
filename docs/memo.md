@@ -310,3 +310,237 @@ python標準では月単位の加算ができないので、計算で出すこ�
 ```
 
 あとは、月の初日から1日ずつ日曜日になるまで`gcday_first`を減らし、同じく月末から土曜日になるまで`gcday_last`を増やすとカレンダーになる。
+
+# 一般管理者ページ
+
+一般管理者ページでは以下のことを行えるようにする。
+
+- エリアの閲覧、追加、変更、削除
+- ごみ区分の閲覧、追加、変更、削除
+- 特定日のごみ収集アイテムの閲覧、追加、変更、削除
+- ごみ収集日の一括指定
+
+## 一覧表示
+
+Modelの内容をall()で取得しレンダリング。
+レンダリング先のテンプレートではtableタグを使って整形する。
+
+view側の実装。今回は管理者ページ用にviewファイルを分けた。
+`views_admin.py`
+
+```python
+def area_list(request):
+  areas = Area.objects.all()
+  context = {
+    'areas' : areas
+  }
+  return render(request, 'gccalendar/admin/area-list.html', context)
+```
+
+`area-list.html`
+```html
+  <main>
+    <h1>収集エリア一覧</h1>
+    <p class="alert alert-{{message_type_class}}">{{message_body}}</p>
+    <section>
+      <a href="{% url 'admin_area_new' %}">新規作成</a>
+      <a href="{% url 'admin_index' %}">管理者メニュートップ</a>
+    </section>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>操作</th>
+          <th>id</th>
+          <th>エリア名</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for area in areas %}
+        <tr>
+          <td>
+            <a href="{% url 'admin_area_edit' area.pk %}">編集</a>
+            <a href="{% url 'admin_area_delete' area.pk %}">削除</a>
+          </td>
+          <td>{{ area.pk }}</td>
+          <td>{{ area.name }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+```
+
+ページネーションを考慮しないならばこんな実装で簡単に一覧が作れる。
+
+## 追加（新規作成）
+
+Model定義をそのままFormの定義として使える場合、`forms.ModelForm`から継承するformモデルを作成する。
+
+アプリのディレクトリに`forms.py`を作成。
+
+```python
+from django import forms
+from .models import *
+
+class AreaForm(forms.ModelForm):
+  class Meta:     # Meta内部クラスに元になるModelを定義する
+    model = Area  # Modelのクラス
+    fields = ['name'] # フォームに表示するフィールドを配列で
+    labels = { 'name': 'エリア名'}  # フォームに表示するタイトルラベルを辞書で。
+    help_texts = { 'name': 'エリア名を入力してください'}  # フォームに表示する説明用ラベルを辞書で。
+
+```
+
+`views_admin.py`
+
+```python
+def area_new(request):
+  # message_bodyやmessage_type_classは警告やエラーなどのメッセージに使う。
+  context = {
+    'message_body' : "",
+    'message_type_class' : "no-message",
+    'form' : None
+  }
+  # getリクエストなら新規作成の新規画面、postリクエストなら入力後の内容になるはず。
+  if request.method == "POST":
+    # postメソッドの場合、リクエスト内容からformオブジェクトを作成する。
+    form = AreaForm(request.POST)
+    # Formクラス側との定義とバリデーションする。ModelFormの場合は元のモデルとのバリデーション。
+    if form.is_valid():
+      # saveメソッドで保存するだけ。
+      form.save()
+      return redirect('admin_area_list')
+    else:
+      # バリデーションチェックに引っかかった場合
+      context['message_body'] = "入力値が不正です。"
+      context['message_type_class'] = 'danger'
+      context['form'] = form
+  else:
+    # getメソッドの場合は、空のフォームを送信。
+    context['form'] = AreaForm()
+  return render(request, 'gccalendar/admin/area-new.html', context)
+```
+
+## 更新
+
+formオブジェクトに予め更新したいレコードの内容を埋める。
+新規取得、更新内容を入力した場合の両方について、コンストラクタで`instance`変数に辞書型のデータを投入する必要がある。
+特に更新保存時は、このようにしないと新規レコード扱いになってしまう。
+
+`views_admin.py`
+```python
+def area_edit(request, area_id):
+  context = {
+    'message_body' : "",
+    'message_type_class' : "no-message",
+    'form' : None
+  }
+  if request.method == "POST":
+    # 編集内容を送信された状態。
+    # POSTの内容とともに、instanceパラメータに更新対象のオブジェクトをセットする。
+    # そうしないとsave時に新規レコード扱いになってしまう。
+    form = AreaForm(request.POST, instance=Area.objects.get(pk=area_id))
+    if form.is_valid():
+      form.save()
+      return redirect('admin_area_list')
+    else:
+      context['message_body'] = "入力値が不正です。"
+      context['message_type_class'] = 'danger'
+      context['form'] = form
+  else:
+    # 編集前の状態。
+    # instanceパラメータに更新対象のオブジェクトをセットする。
+    context['form'] = AreaForm(instance=Area.objects.get(pk=area_id))
+    
+  return render(request, 'gccalendar/admin/area-edit.html', context)
+```
+
+## 削除
+
+パラメータで渡されるidのレコードを存在チェックし、存在したらdeleteする。
+これだけの実装で良い。
+
+```python
+def area_delete(request, area_id):
+  context = {
+    'message_body' : "",
+    'message_type_class' : "no-message",
+    'areas' : None
+  }
+  # objects.getで取得する場合、pkが存在しない値の場合は例外になってしまう。
+  # filterで取得すればexistsメソッドで存在するかどうかの判定ができる。
+  target = Area.objects.filter(pk=area_id)
+  if target.exists():
+    # 対象のidのレコードが存在すればdelete.
+    target.delete()
+    context['message_body'] = f"id:{area_id}を削除しました。"
+    context['message_type_class'] = 'success'
+    context['areas'] = Area.objects.all()
+  else:
+    # 対象のidのレコードが存在しなければエラーメッセージ.
+    context['message_body'] = "不正な入力値です。"
+    context['message_type_class'] = 'danger'
+    context['areas'] = Area.objects.all()
+
+  return render(request, 'gccalendar/admin/area-list.html', context)
+```
+
+## ファイルの取り扱い
+
+フォームにファイル入力を追加するにはいろいろと下準備が必要。
+
+`forms.py`
+```python
+class GCTypeForm(forms.Form):
+  name = forms.CharField(label="ごみ分別名", max_length=80)
+  # フォームでファイル送信を扱うにはFileFieldを使う。
+  image = forms.FileField(label="アイコン")
+```
+
+htmlテンプレート側にはmultipartの設定を忘れない。
+
+`admin_gctype_new.html`
+```html
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary" type="submit">送信</button>
+    </form>
+```
+
+viewsではフォームオブジェクトのコンストラクタに`request.FILES`を追加する。
+
+`views_admin.py`
+```python
+def gctype_new(request):
+  context = {
+    'message_body' : "",
+    'message_type_class' : "no-message",
+    'form' : None
+  }
+  if request.method == "POST":
+    # 引数にPOSTデータとFILESデータの両方を指定しなければならない。
+    form = GCTypeForm(request.POST, request.FILES)
+    if(form.is_valid()):
+      model = GcType()
+      model.name = form.cleaned_data['name']
+      import base64
+      # 画像をbase64エンコードしてテキストとして保存する。
+      # b64encodeしたデータはバイナリなので、decode関数でstringに変換しなければならないようだ。
+      # 大きなファイルを扱わないようにサイズ制限すると良いかと。デフォルトでは2.5MB未満のファイルはインメモリで処理されるとのこと。
+      model.imagebase64 = base64.b64encode(request.FILES['image'].read()).decode()
+      model.save()
+      context['message-body'] = "保存しました。"
+      context['message-type_class'] = 'success'
+      context['form'] = GCTypeForm()
+    else:
+      context['message-body'] = "不正な入力値です。"
+      context['message-type_class'] = 'danger'
+      context['form'] = form
+  else:
+    # 新規作成時は引数無しでOK
+    context['form'] = GCTypeForm()
+  return render(request, 'gccalendar/admin/gctype-new.html', context)
+```
+
+基本的なCRUDはこれで完結。

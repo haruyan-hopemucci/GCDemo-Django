@@ -1,0 +1,17 @@
+{% include "./common-header.html" %}
+
+  <main>
+    <h1>収集エリア編集</h1>
+    <p class="alert alert-{{message_type_class}}">{{message_body}}</p>
+    <p><a href="{% url 'admin_area_list' %}">一覧へ戻る</a></p>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary" type="submit">送信</button>
+    </form>
+  </main>
+
+{% include "./common-footer.html" %}
+
+</body>
+</html>
