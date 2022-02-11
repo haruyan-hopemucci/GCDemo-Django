@@ -189,7 +189,7 @@ class GcDay(models.Model):
 
 モデルクラスを作ったらマイグレーションする。
 
-```
+```shell
 > python manage.py makemigrations gccalendar
 Migrations for 'gccalendar':
   gccalendar\migrations\0001_initial.py

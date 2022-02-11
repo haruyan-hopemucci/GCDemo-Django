@@ -55,7 +55,7 @@ def area_id(request, area_id):
   except Area.DoesNotExist:
     raise Http404("area_id is not exists.")
   # 週間カレンダー作成部分
-  today = datetime.date(2022,1,26) #仮
+  today = datetime.date.today()
   lastday = today + datetime.timedelta(days=6)
   addDays = range(0,7)
   days = [None] * 7
@@ -100,15 +100,18 @@ def area_id_monthly(request, area_id, yyyymm=None):
   # area_idからAreaオブジェクトの取得
   # 取得できなかった場合は404を返す。
   # ショートカット get_object_or_404 も存在してこっちの方が楽だと思うが、他言語との兼ね合いを考えてtry-exceptで処理する。
-  today = datetime.date(2022,1,26) # 仮
+  today = datetime.date.today()
   tomorrow = today + datetime.timedelta(days=1)
   try:
     area = Area.objects.get(pk=area_id)
   except Area.DoesNotExist:
     raise Http404("area_id is not exists.")
   # 対象年月の取得
-  yyyymm = '202201' # 仮
-  y,m = int(yyyymm[0:4]),int(yyyymm[4:6])
+  if yyyymm == None:
+    y,m = today.year, today.month
+  else:
+    # yyyymm = '202201' # 仮
+    y,m = int(yyyymm[0:4]),int(yyyymm[4:6])
   # 対象年月の一日目を取得
   gcday_first = datetime.date(y,m,1)
   # 対象年月の月末日を取得
@@ -153,6 +156,7 @@ def area_id_monthly(request, area_id, yyyymm=None):
     daysData.append(addData)
 
   context = {
+    'ym' : f'{today.year}年{today.month}月',
     'days': daysData,
     'area_name': area.name,
   }
